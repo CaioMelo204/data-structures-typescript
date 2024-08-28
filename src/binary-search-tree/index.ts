@@ -1,4 +1,4 @@
-class TreeNode {
+export class TreeNode {
     value: number;
     left: TreeNode | null = null;
     right: TreeNode | null = null;
@@ -8,7 +8,7 @@ class TreeNode {
     }
 }
 
-class BinarySearchTree {
+export class BinarySearchTree {
     root: TreeNode | null = null;
 
     insert(value: number){
@@ -51,6 +51,57 @@ class BinarySearchTree {
         }
         return false;
     }
+
+    BFS(){
+        let node: TreeNode | null | undefined = this.root,
+            data = [],
+            queue = [];
+        queue.push(node);
+
+        while(queue.length){
+            node = queue.shift();
+            data.push(node?.value);
+            if(node?.left) queue.push(node.left);
+            if(node?.right) queue.push(node.right);
+        }
+        return data;
+    }
+
+    DFSPreOrder(){
+        let data: number[] = [];
+        function traverse(node: TreeNode){
+            data.push(node.value);
+            if(node.left) traverse(node.left);
+            if(node.right) traverse(node.right);
+        }
+        if(this.root !== null)
+            traverse(this.root);
+        return data;
+    }
+
+    DFSPostOrder(){
+        let data: number[] = [];
+        function traverse(node: TreeNode){
+            if(node.left) traverse(node.left);
+            if(node.right) traverse(node.right);
+            data.push(node.value);
+        }
+        if (this.root !== null)
+            traverse(this.root);
+        return data;
+    }
+
+    DFSInOrder(){
+        let data: number[] = [];
+        function traverse(node: TreeNode){
+            if(node.left) traverse(node.left);
+            data.push(node.value);
+            if(node.right) traverse(node.right);
+        }
+        if (this.root !== null)
+            traverse(this.root);
+        return data;
+    }
 }
 
 const bst = new BinarySearchTree();
@@ -61,5 +112,8 @@ bst.insert(2);
 bst.insert(7);
 bst.insert(11);
 bst.insert(16);
-
 console.log(bst.find(10))
+console.log(bst.BFS())
+console.log(bst.DFSPreOrder())
+console.log(bst.DFSPostOrder())
+console.log(bst.DFSInOrder())

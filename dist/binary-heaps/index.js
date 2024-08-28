@@ -1,17 +1,10 @@
 "use strict";
-class PriorityNode {
-    constructor(value, priority) {
-        this.value = value;
-        this.priority = priority;
-    }
-}
-class PriorityQueue {
+class BinaryHeap {
     constructor() {
         this.values = [];
     }
-    enqueue(val, priority) {
-        let newNode = new PriorityNode(val, priority);
-        this.values.push(newNode);
+    insert(value) {
+        this.values.push(value);
         this.bubbleUp();
     }
     bubbleUp() {
@@ -20,22 +13,22 @@ class PriorityQueue {
         while (idx > 0) {
             let parentIdx = Math.floor((idx - 1) / 2);
             let parent = this.values[parentIdx];
-            if (element.priority >= parent.priority)
+            if (element <= parent)
                 break;
             this.values[parentIdx] = element;
             this.values[idx] = parent;
             idx = parentIdx;
         }
     }
-    dequeue() {
-        const min = this.values[0];
+    extractMax() {
+        const max = this.values[0];
         const end = this.values.pop();
         if (this.values.length > 0) {
             // @ts-ignore
             this.values[0] = end;
             this.sinkDown();
         }
-        return min;
+        return max;
     }
     sinkDown() {
         let idx = 0;
@@ -48,14 +41,14 @@ class PriorityQueue {
             let swap = null;
             if (leftChildIdx < length) {
                 leftChild = this.values[leftChildIdx];
-                if (leftChild.priority < element.priority) {
+                if (leftChild > element) {
                     swap = leftChildIdx;
                 }
             }
             if (rightChildIdx < length) {
                 rightChild = this.values[rightChildIdx];
-                if ((swap === null && rightChild.priority < element.priority) ||
-                    (swap !== null && leftChild && rightChild.priority < leftChild.priority)) {
+                if ((swap === null && rightChild > element) ||
+                    (swap !== null && leftChild && rightChild > leftChild)) {
                     swap = rightChildIdx;
                 }
             }
@@ -67,12 +60,14 @@ class PriorityQueue {
         }
     }
 }
-const priorityHeap = new PriorityQueue();
-priorityHeap.enqueue(23, 1);
-priorityHeap.enqueue(45, 2);
-priorityHeap.enqueue(45, 3);
-priorityHeap.enqueue(45, 2);
-priorityHeap.enqueue(43, 1);
-priorityHeap.enqueue(46, 2);
-priorityHeap.enqueue(48, 3);
-console.log(priorityHeap.values);
+const heap = new BinaryHeap();
+heap.insert(41);
+heap.insert(39);
+heap.insert(33);
+heap.insert(18);
+heap.insert(27);
+heap.insert(29);
+heap.insert(55);
+console.log(heap.values);
+heap.extractMax();
+console.log(heap.values);
